@@ -178,7 +178,7 @@ async function processImageOcr(imageUrl) {
     await worker.terminate();
 
     errorMsg.innerHTML = "🧹 Cleaning OCR text with AI to find ingredients...";
-    const extractRes = await fetch("http://127.0.0.1:33006/extract-ingredients-ocr", {
+    const extractRes = await fetch("http://localhost:8000/extract-ingredients-ocr", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: text })
