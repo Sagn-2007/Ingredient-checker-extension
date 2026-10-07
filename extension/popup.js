@@ -164,7 +164,8 @@ async function processImageOcr(imageUrl) {
 
     const worker = await Tesseract.createWorker("eng", 1, {
       workerPath: chrome.runtime.getURL('lib/worker.min.js'),
-      corePath: chrome.runtime.getURL('lib/tesseract-core.wasm.js')
+      corePath: chrome.runtime.getURL('lib/tesseract-core.wasm.js'),
+      workerBlobURL: false
     });
     
     errorMsg.innerHTML = "🖼️ Scanning image for ingredients...";
