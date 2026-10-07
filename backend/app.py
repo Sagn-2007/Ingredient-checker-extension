@@ -126,6 +126,50 @@ def api_check_product(req: CheckRequest):
     
     return result
 
+class OcrRequest(BaseModel):
+    text: str
+
+@app.post("/extract-ingredients-ocr")
+def extract_ingredients_ocr(req: OcrRequest):
+    try:
+        from .checker import client, OPENROUTER_MODEL
+    except ImportError:
+        from checker import client, OPENROUTER_MODEL
+
+    if not client:
+        return {"ingredients": []}
+
+    prompt = f"""You are an AI trained to extract food ingredients from raw OCR text.
+The text contains noise, marketing, manufacturer details, and the ingredients list.
+Your job is to find the ingredients list, extract only the food ingredients, and return them as a JSON list of strings.
+
+OCR Text:
+{req.text}
+
+Rules:
+- Ignore manufacturer addresses, licenses, marketing claims, net weight, etc.
+- Split the ingredients properly.
+- Preserve sub-ingredients if necessary, but keep each distinct item as one string.
+- Return ONLY valid JSON in this exact format:
+{{
+  "ingredients": ["ing1", "ing2"]
+}}"""
+
+    try:
+        response = client.chat.completions.create(
+            model=OPENROUTER_MODEL,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        raw_text = response.choices[0].message.content.strip()
+        if raw_text.startswith("```json"): raw_text = raw_text[7:]
+        if raw_text.startswith("```"): raw_text = raw_text[3:]
+        if raw_text.endswith("```"): raw_text = raw_text[:-3]
+        result = json.loads(raw_text.strip())
+        return {"ingredients": result.get("ingredients", [])}
+    except Exception as e:
+        print("OCR Extract Error:", e)
+        return {"ingredients": []}
+
 @app.get("/admin", response_class=HTMLResponse)
 def admin_dashboard():
     history = load_history()

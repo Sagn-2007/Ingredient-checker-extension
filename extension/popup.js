@@ -177,15 +177,29 @@ async function processImageOcr(imageUrl) {
     const { data: { text } } = await worker.recognize(imgBlob);
     await worker.terminate();
 
-    document.getElementById("manual-fallback").classList.remove("hidden");
-    document.getElementById("manual-ingredients").value = text;
+    errorMsg.innerHTML = "🧹 Cleaning OCR text with AI to find ingredients...";
+    const extractRes = await fetch("http://127.0.0.1:33006/extract-ingredients-ocr", {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text })
+    });
+    const extractData = await extractRes.json();
     
-    errorMsg.innerHTML = "✅ Text extracted! Formatting and analyzing now...";
-    
-    // Trigger the manual check with the extracted text
-    await checkProductManual();
-    
-    errorMsg.classList.add("hidden");
+    if (extractData.ingredients && extractData.ingredients.length > 0) {
+      errorMsg.innerHTML = "✅ Ingredients found! Formatting and analyzing now...";
+      
+      chrome.storage.local.get(["language", "diet"], (res) => {
+        document.getElementById("current-product-name").innerText = "Image Scan";
+        document.getElementById("current-product-diet").innerText = `Diet: ${res.diet || "Vegetarian"} | Ingredients detected: ${extractData.ingredients.length}`;
+        performCheck("Image Scan", extractData.ingredients, null);
+      });
+      errorMsg.classList.add("hidden");
+    } else {
+      document.getElementById("manual-fallback").classList.remove("hidden");
+      document.getElementById("manual-ingredients").value = text;
+      errorMsg.className = "section warning";
+      errorMsg.innerHTML = "⚠️ AI could not clearly extract ingredients from the image. Please edit the text below manually and click Analyze.";
+    }
   } catch(e) {
     console.error("OCR Error:", e);
     errorMsg.className = "section warning";
