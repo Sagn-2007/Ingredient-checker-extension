@@ -138,7 +138,56 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   });
+
+  // Check if there is a pending image to scan from the context menu
+  chrome.storage.local.get(["pendingImageScan"], async (res) => {
+    if (res.pendingImageScan) {
+      const imageUrl = res.pendingImageScan;
+      chrome.storage.local.remove(["pendingImageScan"]);
+      await processImageOcr(imageUrl);
+    }
+  });
 });
+
+async function processImageOcr(imageUrl) {
+  const errorMsg = document.getElementById("error-msg");
+  const checkBtn = document.getElementById("check-btn");
+  
+  try {
+    errorMsg.classList.remove("hidden");
+    errorMsg.className = "section"; 
+    errorMsg.style.background = "#e3f2fd";
+    errorMsg.style.color = "#0277bd";
+    errorMsg.style.border = "1px solid #81d4fa";
+    errorMsg.innerHTML = "🖼️ Starting OCR engine... Please wait.";
+    checkBtn.disabled = true;
+
+    const worker = await Tesseract.createWorker("eng", 1, {
+      workerPath: chrome.runtime.getURL('lib/worker.min.js'),
+      corePath: chrome.runtime.getURL('lib/tesseract-core.wasm.js')
+    });
+    
+    errorMsg.innerHTML = "🖼️ Scanning image for ingredients...";
+    const { data: { text } } = await worker.recognize(imageUrl);
+    await worker.terminate();
+
+    document.getElementById("manual-fallback").classList.remove("hidden");
+    document.getElementById("manual-ingredients").value = text;
+    
+    errorMsg.innerHTML = "✅ Text extracted! Formatting and analyzing now...";
+    
+    // Trigger the manual check with the extracted text
+    await checkProductManual();
+    
+    errorMsg.classList.add("hidden");
+  } catch(e) {
+    console.error("OCR Error:", e);
+    errorMsg.className = "section warning";
+    errorMsg.innerHTML = "❌ Failed to read text from image. Make sure it is a valid image.";
+  } finally {
+    checkBtn.disabled = false;
+  }
+}
 
 function applyTranslations(language) {
   const t = TRANSLATIONS[language] || TRANSLATIONS.English;
@@ -219,6 +268,42 @@ async function checkProductFromPage() {
               if (productName) break;
             }
           }
+
+          let barcode = null;
+          try {
+            const scripts = document.querySelectorAll('script[type="application/ld+json"]');
+            for (const script of scripts) {
+                const data = JSON.parse(script.innerText);
+                const items = Array.isArray(data) ? data : [data];
+                for (const item of items) {
+                    if (item && (item['@type'] === 'Product' || item.gtin13 || item.gtin14 || item.gtin8 || item.sku)) {
+                        let potentialCode = item.gtin13 || item.gtin14 || item.gtin8 || item.sku || item.mpn;
+                        if (potentialCode && typeof potentialCode === 'string' && potentialCode.length >= 8 && /^[0-9]+$/.test(potentialCode)) {
+                           barcode = potentialCode;
+                           break;
+                        }
+                    }
+                }
+                if (barcode) break;
+            }
+            if (!barcode) {
+                const elements = document.querySelectorAll('th, td, span, strong, div');
+                for (const el of elements) {
+                    const text = (el.innerText || "").trim().toLowerCase();
+                    if (text === 'ean' || text === 'upc' || text === 'barcode') {
+                        let next = el.nextElementSibling || (el.parentElement ? el.parentElement.nextElementSibling : null);
+                        if (next && next.innerText) {
+                            let val = next.innerText.trim();
+                            if (/^[0-9]{8,14}$/.test(val)) {
+                                barcode = val;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+          } catch(e) {}
+
 
 
           // ---------------------------------------------------------------
@@ -411,16 +496,16 @@ async function checkProductFromPage() {
                   }
               }
           }
-          return { productName: productName.trim().replace(/\n/g, ' '), ingredients: ingredientsList, allergens: allergens, isFood: isFood, isCategoryPage: isCategoryPage };
+          return { productName: productName.trim().replace(/\n/g, ' '), ingredients: ingredientsList, allergens: allergens, isFood: isFood, isCategoryPage: isCategoryPage, barcode: barcode };
         }
       },
-      (results) => {
+      async (results) => {
         if (chrome.runtime.lastError || !results || !results[0].result) {
           showManualFallback();
           return;
         }
         
-        const data = results[0].result;
+        let data = results[0].result;
         
         if (data.isCategoryPage) {
            showNonFoodError("SELECT A SPECIFIC PRODUCT", "Please click on a specific product page rather than scanning the search results.");
@@ -431,6 +516,27 @@ async function checkProductFromPage() {
            showNonFoodError("FOOD PRODUCT NOT DETECTED", "This doesn't appear to be a food or grocery item. We only analyze edible products.");
            return;
         }
+
+        // --- NEW BARCODE LOGIC ---
+        if (data.barcode) {
+            console.log("Barcode found on page: " + data.barcode + ". Querying Open Food Facts...");
+            try {
+                const offRes = await fetch(`https://world.openfoodfacts.org/api/v2/product/${data.barcode}.json`);
+                if (offRes.ok) {
+                    const offData = await offRes.json();
+                    if (offData.product && offData.product.ingredients && offData.product.ingredients.length > 0) {
+                        console.log("Found ingredients in Open Food Facts!");
+                        data.ingredients = offData.product.ingredients.map(i => i.text.replace(/_*/g, "").trim()).filter(i => i);
+                        data.productName = offData.product.product_name || data.productName;
+                        data.isFood = true;
+                        data.usedBarcode = true;
+                    }
+                }
+            } catch (err) {
+                console.error("Open Food Facts fetch failed:", err);
+            }
+        }
+        // -------------------------
 
         if (!data.ingredients || data.ingredients.length === 0) {
           showManualFallback();
@@ -445,10 +551,8 @@ async function checkProductFromPage() {
         document.getElementById("current-product-name").innerText = cleanName;
         
         chrome.storage.local.get(["diet"], (res) => {
-            document.getElementById("current-product-diet").innerText = `Diet: ${res.diet || "Vegetarian"} | Ingredients detected: ${data.ingredients.length}`;
-            console.log("🔥 WORKING EXTRACTION ARRAY:");
-            console.log(data.ingredients);
-            console.log("🔥 COUNT:", data.ingredients.length);
+            let extra = data.usedBarcode ? " (from Barcode)" : "";
+            document.getElementById("current-product-diet").innerText = `Diet: ${res.diet || "Vegetarian"} | Ingredients detected: ${data.ingredients.length}${extra}`;
         });
         
         performCheck(data.productName, data.ingredients, data.allergens, data.isFood);
