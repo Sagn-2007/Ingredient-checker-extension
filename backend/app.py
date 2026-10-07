@@ -51,36 +51,43 @@ class CheckRequest(BaseModel):
 def health_check():
     return {"status": "ok"}
 
-@app.get("/test-gemini")
-def test_gemini():
-    """Development endpoint — verify Gemini connectivity."""
+@app.get("/test-openrouter")
+def test_openrouter():
+    """Development endpoint — verify OpenRouter connectivity."""
     try:
-        from .checker import client, GEMINI_MODEL
+        from .checker import client, OPENROUTER_MODEL
     except ImportError:
-        from checker import client, GEMINI_MODEL
+        from checker import client, OPENROUTER_MODEL
 
     try:
-        from .config import GEMINI_API_KEY
+        from .config import OPENROUTER_API_KEY
     except ImportError:
-        from config import GEMINI_API_KEY
+        from config import OPENROUTER_API_KEY
 
-    if not GEMINI_API_KEY:
-        return {"gemini_available": False, "error": "GEMINI_API_KEY not loaded from .env"}
+    if not OPENROUTER_API_KEY:
+        return {"openrouter_available": False, "error": "OPENROUTER_API_KEY not loaded from .env"}
     if not client:
-        return {"gemini_available": False, "error": "Gemini client failed to initialize"}
+        return {"openrouter_available": False, "error": "OpenRouter client failed to initialize"}
 
     try:
-        from google.genai import types as _types
-        response = client.models.generate_content(
-            model=GEMINI_MODEL,
-            contents='Classify the ingredient "corn" for a vegetarian diet. Return ONLY JSON: {"ingredient":"corn","status":"fits","reason":"plant-derived"}',
-            config=_types.GenerateContentConfig(response_mime_type="application/json")
+        response = client.chat.completions.create(
+            model=OPENROUTER_MODEL,
+            messages=[
+                {
+                    "role": "user",
+                    "content": 'Classify the ingredient "corn" for a vegetarian diet. Return ONLY JSON: {"ingredient":"corn","status":"fits","reason":"plant-derived"}'
+                }
+            ]
         )
         import json
-        result = json.loads(response.text)
-        return {"gemini_available": True, "model": GEMINI_MODEL, "test_result": result}
+        raw_text = response.choices[0].message.content.strip()
+        if raw_text.startswith("```json"): raw_text = raw_text[7:]
+        if raw_text.startswith("```"): raw_text = raw_text[3:]
+        if raw_text.endswith("```"): raw_text = raw_text[:-3]
+        result = json.loads(raw_text.strip())
+        return {"openrouter_available": True, "model": OPENROUTER_MODEL, "test_result": result}
     except Exception as e:
-        return {"gemini_available": False, "error": str(e), "model": GEMINI_MODEL}
+        return {"openrouter_available": False, "error": str(e), "model": OPENROUTER_MODEL}
 
 @app.post("/check-product")
 def api_check_product(req: CheckRequest):
