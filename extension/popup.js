@@ -168,7 +168,12 @@ async function processImageOcr(imageUrl) {
     });
     
     errorMsg.innerHTML = "🖼️ Scanning image for ingredients...";
-    const { data: { text } } = await worker.recognize(imageUrl);
+    
+    // Fetch the image as a blob to bypass CORS/Tainted Canvas issues
+    const imgResponse = await fetch(imageUrl);
+    const imgBlob = await imgResponse.blob();
+    
+    const { data: { text } } = await worker.recognize(imgBlob);
     await worker.terminate();
 
     document.getElementById("manual-fallback").classList.remove("hidden");
@@ -183,7 +188,7 @@ async function processImageOcr(imageUrl) {
   } catch(e) {
     console.error("OCR Error:", e);
     errorMsg.className = "section warning";
-    errorMsg.innerHTML = "❌ Failed to read text from image. Make sure it is a valid image.";
+    errorMsg.innerHTML = "❌ Error: " + (e.message || JSON.stringify(e) || e.toString());
   } finally {
     checkBtn.disabled = false;
   }
