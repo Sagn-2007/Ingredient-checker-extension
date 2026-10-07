@@ -1,0 +1,314 @@
+[
+  {
+    "name": "gelatin",
+    "aliases": ["E441", "gelatine"],
+    "category": "animal-derived",
+    "conflicts_with": ["vegetarian", "vegan"],
+    "status": "conflicts",
+    "reason": "Derived from collagen taken from animal body parts."
+  },
+  {
+    "name": "carmine",
+    "aliases": ["E120", "cochineal", "carminic acid"],
+    "category": "animal-derived",
+    "conflicts_with": ["vegetarian", "vegan"],
+    "status": "conflicts",
+    "reason": "Red pigment derived from crushed insects."
+  },
+  {
+    "name": "shellac",
+    "aliases": ["E904", "confectioner's glaze"],
+    "category": "animal-derived",
+    "conflicts_with": ["vegetarian", "vegan"],
+    "status": "conflicts",
+    "reason": "Resin secreted by the female lac bug."
+  },
+  {
+    "name": "lard",
+    "aliases": ["pork fat"],
+    "category": "animal-derived",
+    "conflicts_with": ["vegetarian", "vegan"],
+    "status": "conflicts",
+    "reason": "Pig fat."
+  },
+  {
+    "name": "tallow",
+    "aliases": ["beef tallow", "suet"],
+    "category": "animal-derived",
+    "conflicts_with": ["vegetarian", "vegan"],
+    "status": "conflicts",
+    "reason": "Raw, hard fat of beef or mutton."
+  },
+  {
+    "name": "isinglass",
+    "aliases": [],
+    "category": "animal-derived",
+    "conflicts_with": ["vegetarian", "vegan"],
+    "status": "conflicts",
+    "reason": "Substance obtained from the dried swim bladders of fish."
+  },
+  {
+    "name": "fish oil",
+    "aliases": [],
+    "category": "animal-derived",
+    "conflicts_with": ["vegetarian", "vegan"],
+    "status": "conflicts",
+    "reason": "Derived from the tissues of oily fish."
+  },
+  {
+    "name": "anchovy",
+    "aliases": ["anchovies"],
+    "category": "animal-derived",
+    "conflicts_with": ["vegetarian", "vegan"],
+    "status": "conflicts",
+    "reason": "A small forage fish."
+  },
+  {
+    "name": "fish sauce",
+    "aliases": [],
+    "category": "animal-derived",
+    "conflicts_with": ["vegetarian", "vegan"],
+    "status": "conflicts",
+    "reason": "Condiment made from fish coated in salt and fermented."
+  },
+  {
+    "name": "shrimp paste",
+    "aliases": ["belacan"],
+    "category": "animal-derived",
+    "conflicts_with": ["vegetarian", "vegan"],
+    "status": "conflicts",
+    "reason": "Fermented condiment made from crushed shrimp."
+  },
+  {
+    "name": "rennet",
+    "aliases": ["animal rennet"],
+    "category": "animal-derived",
+    "conflicts_with": ["vegetarian", "vegan"],
+    "status": "conflicts",
+    "reason": "Enzymes produced in the stomachs of ruminant mammals."
+  },
+  {
+    "name": "whey",
+    "aliases": ["whey powder", "whey protein"],
+    "category": "dairy",
+    "conflicts_with": ["vegan"],
+    "status": "conflicts",
+    "reason": "A byproduct of cheese making from milk."
+  },
+  {
+    "name": "casein",
+    "aliases": ["caseinate", "sodium caseinate"],
+    "category": "dairy",
+    "conflicts_with": ["vegan"],
+    "status": "conflicts",
+    "reason": "The main protein present in milk."
+  },
+  {
+    "name": "lactose",
+    "aliases": [],
+    "category": "dairy",
+    "conflicts_with": ["vegan"],
+    "status": "conflicts",
+    "reason": "Sugar derived from milk."
+  },
+  {
+    "name": "milk solids",
+    "aliases": ["non-fat milk solids", "milk powder", "milk"],
+    "category": "dairy",
+    "conflicts_with": ["vegan"],
+    "status": "conflicts",
+    "reason": "Derived from dairy milk."
+  },
+  {
+    "name": "butter",
+    "aliases": ["butterfat"],
+    "category": "dairy",
+    "conflicts_with": ["vegan"],
+    "status": "conflicts",
+    "reason": "Dairy product made from churning milk or cream."
+  },
+  {
+    "name": "ghee",
+    "aliases": ["clarified butter"],
+    "category": "dairy",
+    "conflicts_with": ["vegan"],
+    "status": "conflicts",
+    "reason": "Clarified butter originating from milk."
+  },
+  {
+    "name": "cream",
+    "aliases": [],
+    "category": "dairy",
+    "conflicts_with": ["vegan"],
+    "status": "conflicts",
+    "reason": "Dairy product originating from milk."
+  },
+  {
+    "name": "cheese",
+    "aliases": ["cheese powder"],
+    "category": "dairy",
+    "conflicts_with": ["vegan"],
+    "status": "conflicts",
+    "reason": "Dairy product originating from milk."
+  },
+  {
+    "name": "egg",
+    "aliases": ["eggs", "egg powder", "egg yolk", "egg white"],
+    "category": "poultry",
+    "conflicts_with": ["vegan"],
+    "status": "conflicts",
+    "reason": "Derived from birds."
+  },
+  {
+    "name": "albumen",
+    "aliases": ["egg white"],
+    "category": "poultry",
+    "conflicts_with": ["vegan"],
+    "status": "conflicts",
+    "reason": "Egg white protein."
+  },
+  {
+    "name": "honey",
+    "aliases": [],
+    "category": "animal-derived",
+    "conflicts_with": ["vegan"],
+    "status": "conflicts",
+    "reason": "Produced by bees."
+  },
+  {
+    "name": "beeswax",
+    "aliases": ["E901"],
+    "category": "animal-derived",
+    "conflicts_with": ["vegan"],
+    "status": "conflicts",
+    "reason": "Wax produced by honey bees."
+  },
+  {
+    "name": "onion",
+    "aliases": ["onion powder", "dried onion", "dehydrated onion"],
+    "category": "vegetable",
+    "conflicts_with": ["jain"],
+    "status": "conflicts",
+    "reason": "Contains onion, which is excluded by the configured Jain rules."
+  },
+  {
+    "name": "garlic",
+    "aliases": ["garlic powder", "garlic paste", "dehydrated garlic"],
+    "category": "vegetable",
+    "conflicts_with": ["jain"],
+    "status": "conflicts",
+    "reason": "Contains garlic, which is excluded by the configured Jain rules."
+  },
+  {
+    "name": "potato",
+    "aliases": ["potatoes", "potato flakes", "potato powder"],
+    "category": "vegetable",
+    "conflicts_with": ["jain"],
+    "status": "conflicts",
+    "reason": "Root vegetable excluded by the configured Jain rules."
+  },
+  {
+    "name": "potato starch",
+    "aliases": [],
+    "category": "plant",
+    "conflicts_with": [],
+    "status": "fits",
+    "reason": "Refined starch derived from potato; generally accepted across dietary profiles."
+  },
+  {
+    "name": "carrot",
+    "aliases": ["carrots", "carrot juice"],
+    "category": "vegetable",
+    "conflicts_with": ["jain"],
+    "status": "conflicts",
+    "reason": "Root vegetable excluded by the configured Jain rules."
+  },
+  {
+    "name": "radish",
+    "aliases": ["radishes"],
+    "category": "vegetable",
+    "conflicts_with": ["jain"],
+    "status": "conflicts",
+    "reason": "Root vegetable excluded by the configured Jain rules."
+  },
+  {
+    "name": "beetroot",
+    "aliases": ["beets", "beet juice"],
+    "category": "vegetable",
+    "conflicts_with": ["jain"],
+    "status": "conflicts",
+    "reason": "Root vegetable excluded by the configured Jain rules."
+  },
+  {
+    "name": "mushroom",
+    "aliases": ["mushrooms", "mushroom extract"],
+    "category": "fungi",
+    "conflicts_with": ["jain"],
+    "status": "conflicts",
+    "reason": "Fungi excluded by the configured Jain rules."
+  },
+  {
+    "name": "corn",
+    "aliases": ["corn grits", "maize", "maize grits"],
+    "category": "plant",
+    "conflicts_with": [],
+    "status": "fits",
+    "reason": "Plant-derived."
+  },
+  {
+    "name": "almond",
+    "aliases": ["almonds", "sliced almond", "sliced almonds", "almond pieces"],
+    "category": "plant",
+    "conflicts_with": [],
+    "status": "fits",
+    "reason": "Plant-derived."
+  },
+  {
+    "name": "salt",
+    "aliases": ["iodized salt", "sodium chloride", "sea salt"],
+    "category": "mineral",
+    "conflicts_with": [],
+    "status": "fits",
+    "reason": "Mineral-derived."
+  },
+  {
+    "name": "sugar",
+    "aliases": ["cane sugar", "sucrose"],
+    "category": "plant",
+    "conflicts_with": [],
+    "status": "fits",
+    "reason": "Plant-derived."
+  },
+  {
+    "name": "dextrose",
+    "aliases": ["glucose", "starch", "corn starch", "rice starch"],
+    "category": "plant",
+    "conflicts_with": [],
+    "status": "fits",
+    "reason": "Generally produced from plant starch."
+  },
+  {
+    "name": "wheat",
+    "aliases": ["wheat flour", "rice", "rice flour", "oats", "oat flour", "barley", "barley flour", "cereal", "cereal extract"],
+    "category": "plant",
+    "conflicts_with": [],
+    "status": "fits",
+    "reason": "Plant-derived grain/cereal."
+  },
+  {
+    "name": "sunflower oil",
+    "aliases": ["olive oil", "coconut oil", "mustard oil", "vegetable oil"],
+    "category": "plant",
+    "conflicts_with": [],
+    "status": "fits",
+    "reason": "Plant-derived oil."
+  },
+  {
+    "name": "cocoa",
+    "aliases": ["cocoa powder", "cinnamon", "turmeric", "pepper", "black pepper", "water", "citric acid", "baking soda", "sodium bicarbonate"],
+    "category": "mixed",
+    "conflicts_with": [],
+    "status": "fits",
+    "reason": "Common plant or mineral ingredient."
+  }
+]

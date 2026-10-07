@@ -1,0 +1,183 @@
+body {
+  width: 360px;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #333;
+  background: #f9f9f9;
+}
+
+.header {
+  background: #2e7d32;
+  color: white;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.section {
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+  background: white;
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #555;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+select, input[type="text"], textarea {
+  width: 100%;
+  padding: 6px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+button {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+button:hover {
+  background: #e0e0e0;
+}
+
+.primary-btn {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  width: 100%;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.primary-btn:hover {
+  background: #1b5e20;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.status-msg {
+  color: #2e7d32;
+  font-size: 12px;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.warning {
+  color: #d32f2f;
+  font-weight: bold;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.verdict-card {
+  padding: 16px;
+  border-radius: 8px;
+  margin: 12px 0;
+  text-align: center;
+}
+
+.verdict-card h2 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+}
+
+.verdict-card p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.verdict-fits {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.verdict-doubtful {
+  background: #fff8e1;
+  color: #f57f17;
+  border: 1px solid #ffecb3;
+}
+
+.verdict-conflicts {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+#ingredients-count {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.flagged-item {
+  background: #f5f5f5;
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  border-left: 4px solid #999;
+}
+
+.flagged-item.conflicts {
+  border-left-color: #c62828;
+}
+
+.flagged-item.doubtful {
+  border-left-color: #f57f17;
+}
+
+.flagged-name {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.flagged-reason {
+  font-size: 12px;
+  color: #444;
+}
+
+ul#history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul#history-list li {
+  font-size: 13px;
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.footer {
+  font-size: 11px;
+  color: #777;
+  padding: 12px;
+  text-align: center;
+  background: #eee;
+}

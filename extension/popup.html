@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ingredient Label Checker</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="header">
+    🥗 Ingredient Label Checker
+  </div>
+
+  <div id="current-product-section" class="section">
+    <h3 id="ui-current-product-title">🛒 CURRENT PRODUCT</h3>
+    <div id="current-product-name" class="bold">Product name unavailable</div>
+    <div id="current-product-diet" style="font-size: 13px; color: #555; margin-top: 4px;"></div>
+  </div>
+
+  <div id="check-section" class="section">
+    <button id="check-btn" class="primary-btn">🔍 Check Product</button>
+  </div>
+
+  <div id="manual-fallback" class="section hidden">
+    <div id="ui-manual-fallback-msg" class="warning">We couldn't automatically detect the ingredients.</div>
+    <label id="ui-manual-label">Paste the ingredient list below:</label>
+    <textarea id="manual-ingredients" rows="4"></textarea>
+    <button id="manual-check-btn">Analyze Ingredients</button>
+  </div>
+
+  <div id="error-msg" class="section warning hidden"></div>
+
+  <div id="result-section" class="section hidden">
+    <div id="verdict-card" class="verdict-card">
+      <h2 id="verdict-title"></h2>
+      <p id="verdict-subtitle"></p>
+      <div id="verdict-stats" style="margin-top: 10px; font-size: 13px;"></div>
+    </div>
+    
+    <div id="suggested-action-container" class="hidden" style="margin-top:12px; margin-bottom:12px; font-size:13px; padding: 10px; background: #f0f0f0; border-radius: 6px;">
+      <div id="suggested-action-title" style="font-weight: bold; margin-bottom: 4px;"></div>
+      <div id="suggested-action-text"></div>
+    </div>
+
+    <div style="margin-top: 16px; margin-bottom: 8px;">
+      <strong id="ui-ingredient-analysis" style="font-size: 14px;">📋 INGREDIENT ANALYSIS</strong>
+    </div>
+    
+    <div id="flagged-ingredients-list"></div>
+
+    <div style="margin-top: 12px; font-size: 12px; color: #555;">
+      <strong id="ui-analysis-source-title">🔍 Ingredient source</strong><br>
+      <span id="analysis-source-text">✓ Product page</span>
+    </div>
+
+    <div id="allergen-section" class="hidden" style="margin-top: 12px; padding: 10px; background: #fff3e0; border: 1px solid #ffcc80; border-radius: 6px;">
+      <h4 id="ui-allergen-title" style="margin: 0 0 8px 0; color: #e65100; font-size: 13px;">⚠️ ALLERGEN INFORMATION</h4>
+      <div id="allergen-contains-container" class="hidden">
+        <strong id="ui-contains-label" style="font-size: 12px;">Contains:</strong>
+        <ul id="allergen-contains-list" style="margin: 4px 0 8px 0; padding-left: 20px; font-size: 12px;"></ul>
+      </div>
+      <div id="allergen-may-contain-container" class="hidden">
+        <strong id="ui-may-contain-label" style="font-size: 12px;">May contain:</strong>
+        <ul id="allergen-may-contain-list" style="margin: 4px 0 0 0; padding-left: 20px; font-size: 12px;"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="profile-section" class="section">
+    <h3 id="ui-diet-profile">👤 DIET PROFILE</h3>
+    <label>
+      <span id="ui-diet-label">Diet:</span>
+      <select id="diet-select">
+        <option value="Vegetarian">Vegetarian</option>
+        <option value="Vegan">Vegan</option>
+        <option value="Jain">Jain</option>
+      </select>
+    </label>
+    
+    <label>
+      <span id="ui-also-avoid-label">Also avoid (comma-separated):</span>
+      <input type="text" id="custom-avoid" placeholder="e.g. peanuts, coconut, caffeine">
+    </label>
+    
+    <label>
+      <span id="ui-language-label">Language:</span>
+      <select id="lang-select">
+        <option value="English">English</option>
+        <option value="Hindi">Hindi</option>
+        <option value="Bengali">Bengali</option>
+      </select>
+    </label>
+    
+    <button id="save-profile-btn">Save Profile</button>
+    <div id="save-status" class="status-msg hidden">Saved!</div>
+  </div>
+
+  <div id="how-it-works-section" class="section">
+    <h3 id="ui-how-it-works-title">🔍 HOW IT WORKS</h3>
+    <ol style="margin: 0; padding-left: 20px; font-size: 13px; color: #444;">
+      <li id="ui-how-1">Detect ingredients</li>
+      <li id="ui-how-2">Check known ingredients</li>
+      <li id="ui-how-3">Analyze unknowns with Gemini</li>
+      <li id="ui-how-4">Generate your personalized verdict</li>
+    </ol>
+  </div>
+
+  <div id="history-section" class="section">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h3 id="ui-scan-history" style="margin: 0;">📋 SCAN HISTORY</h3>
+      <button id="clear-history-btn" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px;">Clear All</button>
+    </div>
+    <ul id="history-list" style="padding-left: 0; list-style: none;"></ul>
+  </div>
+
+  <div class="footer">
+    This tool helps with diet preferences. It is not a medical tool. If you have a food allergy, read the label yourself and follow your doctor's advice.
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
