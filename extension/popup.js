@@ -18,7 +18,7 @@ const TRANSLATIONS = {
     suggested_action_conflict: "The following ingredient conflicts with your selected dietary profile. Consider choosing another product.",
     reason_label: "Why?",
     source_rules: "✓ Rule database",
-    source_gemini: "🤖 Gemini AI",
+    source_gemini: "🤖 AI Model",
     source_custom: "👤 Custom avoid list",
     source_error: "⚠️ Error",
     allergen_title: "⚠️ ALLERGEN INFORMATION",
@@ -635,7 +635,7 @@ async function performCheck(productName, ingredientsList, allergens, isFood = tr
 
 function getSourceTranslation(source, t) {
     if (source === "rules") return t.source_rules;
-    if (source === "gemini") return t.source_gemini;
+    if (source === "gemini" || source === "openrouter") return t.source_gemini;
     if (source === "custom") return t.source_custom;
     return t.source_error;
 }
