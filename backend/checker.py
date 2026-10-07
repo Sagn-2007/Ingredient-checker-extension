@@ -148,7 +148,8 @@ def check_product(
             try:
                 from tenacity import retry, stop_after_attempt, wait_exponential
 
-                ingredients_json_str = json.dumps(unknown_ingredients)
+                unknown_ingredients_with_ids = [{"id": str(idx), "name": ing} for idx, ing in enumerate(unknown_ingredients)]
+                ingredients_json_str = json.dumps(unknown_ingredients_with_ids)
                 prompt = f"""You are classifying food ingredients for a dietary preference check.
 
 Diet: {diet}
@@ -167,7 +168,7 @@ Rules:
 Return ONLY valid JSON in this exact format:
 {{
   "results": [
-    {{"ingredient": "<name>", "status": "fits|doubtful|conflicts", "reason": "<short explanation>"}}
+    {{"id": "<id>", "status": "fits|doubtful|conflicts", "reason": "<short explanation>"}}
   ]
 }}"""
 
@@ -194,11 +195,12 @@ Return ONLY valid JSON in this exact format:
                 print(f"[OpenRouter] Raw response (first 500 chars): {raw_text[:500]}")
 
                 result = json.loads(raw_text)
-                ai_results = {item["ingredient"]: item for item in result.get("results", [])}
+                ai_results = {str(item.get("id")): item for item in result.get("results", []) if "id" in item}
 
-                for ing in unknown_ingredients:
-                    if ing in ai_results:
-                        res = ai_results[ing]
+                for idx, ing in enumerate(unknown_ingredients):
+                    ing_id = str(idx)
+                    if ing_id in ai_results:
+                        res = ai_results[ing_id]
                         status = res.get('status', 'doubtful').lower()
                         if status not in ['fits', 'doubtful', 'conflicts']:
                             status = 'doubtful'
